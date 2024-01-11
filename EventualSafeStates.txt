@@ -81,9 +81,9 @@ int main() {
         cout<<"Graph is not cyclic !!";
     }
     
-    cout<<endl<<"Safe nodes are :- ";
+    cout<<endl<<"Eventual Safe nodes are :- ";
     for(int i = 0; i < V; i++) {
-        if(!visited[i]) {
+        if(!pathVisited[i]) {
             cout<<i<<" ";
         }
     }
