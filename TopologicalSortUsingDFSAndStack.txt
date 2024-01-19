@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int V = 6;
+
+void addEdge(vector<int> graph[], int source, int destination) {
+    graph[source].push_back(destination);
+}
+
+void DFS(vector<int> graph[], vector<int> &visited, stack<int> &st, int node) {
+    visited[node] = 1;
+    for(int neighbour: graph[node]) {
+        if(!visited[neighbour]) {
+            DFS(graph, visited, st, neighbour);
+        }
+    }
+    st.push(node);
+}
+
+void topologicalSort(vector<int> graph[], vector<int> &visited, stack <int> &st) {
+    for(int i = 0; i < V; i++) {
+        if(!visited[i]) {
+            DFS(graph, visited, st, i);
+        }
+    }
+}
+
+int main() {
+    
+    vector<int> graph[V];
+    
+    addEdge(graph, 0, 3);
+    addEdge(graph, 0, 2);
+    addEdge(graph, 1, 4);
+    addEdge(graph, 2, 1);
+    addEdge(graph, 2, 3);
+    addEdge(graph, 3, 1);
+    addEdge(graph, 5, 1);
+    addEdge(graph, 5, 4);
+    
+    vector<int> visited(V, 0);
+    stack<int> st;
+    topologicalSort(graph, visited, st);
+    for(int i = 0; i < V; i++) {
+        cout<<st.top()<<" ";
+        st.pop();
+    }
+    
+    return 0;
+}
