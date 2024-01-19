@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int V = 4;
+
+void addEdge(vector<int> graph[], int source, int destination) {
+    graph[source].push_back(destination);
+    graph[destination].push_back(source);
+}
+
+bool BFS(vector<int> graph[], vector<int> &visited, int node, int parent) {
+    queue<pair<int, int>> q;
+    q.push({node, parent});
+    visited[node] = 1;
+    while(!q.empty()) {
+        int front_node = q.front().first;
+        int front_parent = q.front().second;
+        q.pop();
+        for(int neighbour: graph[front_node]) {
+            if(!visited[neighbour]) {
+                q.push({neighbour, front_node});
+                visited[neighbour] = 1;
+            }
+            else if(neighbour != front_parent) {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+bool isCyclic(vector<int> graph[], vector<int> &visited) {
+    for(int i = 0; i < V; i++) {
+        int parent = -1;
+        if(!visited[i]) {
+            if(BFS(graph, visited, i, parent) == true) {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+int main() {
+    
+    vector<int> graph[V];
+    
+    //Test Case 1
+    // addEdge(graph, 0, 1);
+    // addEdge(graph, 0, 2);
+    // addEdge(graph, 0, 3);
+    // addEdge(graph, 1, 2);
+    
+    //Test Case 2
+    addEdge(graph, 0, 1);
+    addEdge(graph, 0, 2);
+    addEdge(graph, 0, 3);
+    
+    vector<int> visited(V, 0);
+    bool result = isCyclic(graph, visited);
+    if(result) {
+        cout<<"Graph is cyclic !!";
+    }
+    else {
+        cout<<"Graph is not cyclic !!";
+    }
+    
+    return 0;
+}
