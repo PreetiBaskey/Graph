@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+//Test Case 1
+const int V = 3;
+
+//Test Case 2
+// const int V = 5;
+
+void addEdge(vector<vector<int>> adj[], int source, int destination, int weight) {
+    adj[source].push_back({destination, weight});
+    adj[destination].push_back({source, weight});
+}
+
+int main() {
+    
+    vector<vector<int>> adj[V];
+    
+    //Test Case 1
+    addEdge(adj, 0, 1, 1);
+    addEdge(adj, 0, 2, 6);
+    addEdge(adj, 1, 2, 3);
+    
+    //Test Case 2
+    // addEdge(adj, 0, 1, 7);
+    // addEdge(adj, 0, 4, 1);
+    // addEdge(adj, 1, 2, 3);
+    // addEdge(adj, 1, 4, 8);
+    // addEdge(adj, 2, 3, 6);
+    // addEdge(adj, 2, 4, 2);
+    // addEdge(adj, 3, 4, 7);
+    
+    //set to store {distance, node}
+    set<pair<int, int>> st;
+    //Vector to store minimum distances
+    vector<int> result(V, INT_MAX);
+    
+    //Source Node
+    int source = 2;
+    result[source] = 0;
+    st.insert({0, source});
+    
+    //Pop queue elements and check with its neighbours
+    while(!st.empty()) {
+        auto &it = *st.begin();
+        int front_distance = it.first;
+        int front_node = it.second;
+        st.erase(it);
+        for(auto &neighbour: adj[front_node]) {
+            int neighbour_node = neighbour[0];
+            int neighbour_distance = neighbour[1];
+            if(front_distance + neighbour_distance < result[neighbour_node]) {
+                
+                if(result[neighbour_node] != INT_MAX) {
+                    st.erase({result[neighbour_node], neighbour_node});
+                    
+                    //Above line can be replaced by below code
+                    // auto iter = st.find({result[neighbour_node], neighbour_node]});
+                    // st.erase(item);
+                }
+                
+                result[neighbour_node] = front_distance + neighbour_distance;
+                st.insert({front_distance + neighbour_distance, neighbour_node});
+            }
+        }
+    }
+    
+    cout<<endl<<"Minimum Distances are for each node :- ";
+    for(int data: result) {
+        cout<<data<<" ";
+    }
+    
+    
+    return 0;
+}
