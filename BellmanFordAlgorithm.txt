@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// Test Case 1
+const int V = 6;
+
+// Test Case 2
+// const int V = 2;
+
+// void addEdge(vector<vector<int>> adj[], int source, int destination, int weight) {
+//     adj[source].push_back({destination, weight});
+//     adj[destination].push_back({source, weight});
+// }
+
+void addEdge(vector<pair<pair<int, int>, int>> &adj, int source, int destination, int weight) {
+    adj.push_back({{source, destination}, weight});
+}
+
+vector<int> bellmanFordAlgorithm(vector<pair<pair<int, int>, int>> &adj, vector<int> &result, int V) {
+    for(int count = 1; count <= V - 1; count++) {
+        for(auto &neighbour: adj) {
+            int u = neighbour.first.first;
+            int v = neighbour.first.second;
+            int w = neighbour.second;
+            
+            if(result[u] != INT_MAX && result[u] + w < result[v]) {
+                result[v] = result[u] + w;
+            }
+        }
+    }
+    for(auto &neighbour: adj) {
+        int u = neighbour.first.first;
+        int v = neighbour.first.second;
+        int w = neighbour.second;
+        
+        if(result[u] != INT_MAX && result[u] + w < result[v]) {
+            result[v] = {-1};
+        }
+    }
+    
+    return result;
+}
+
+int main() {
+    
+    vector<pair<pair<int, int>, int>> adj;
+    
+    // Test Case 1
+    addEdge(adj, 0, 1, 5);
+    addEdge(adj, 1, 2, -3);
+    addEdge(adj, 1, 5, -2);
+    addEdge(adj, 2, 4, 4);
+    addEdge(adj, 3, 2, 7);
+    addEdge(adj, 3, 4, -3);
+    addEdge(adj, 5, 3, 2);
+    
+    // Test Case 2
+    // addEdge(adj, 0, 1, 9);
+    
+    int source = 0;
+    vector<int> result(V, 1e8);
+    result[source] = 0;
+    
+    bellmanFordAlgorithm(adj, result, V);
+    for(int data: result) {
+        cout<<data<<" ";
+    }
+    
+    
+    return 0;
+}
