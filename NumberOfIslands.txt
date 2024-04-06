@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void BFS(vector<vector<int>> &grid, vector<vector<int>> &visited, queue<pair<int, int>> &q, int i, int j) {
+    int n = grid.size();
+    int m = grid[0].size();
+    visited[i][j] = 1;
+    q.push({i, j});
+
+    while(!q.empty()) {
+        int front_row = q.front().first;
+        int front_col = q.front().second;
+        q.pop();
+        for(int delrow = -1; delrow <= 1; delrow++) {
+            for(int delcol = -1; delcol <= 1; delcol++) {
+                int newRow = front_row + delrow;
+                int newCol = front_col + delcol;
+                if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && grid[newRow][newCol] == 1 && !visited[newRow][newCol]) {
+                    q.push({newRow, newCol});
+                    visited[newRow][newCol] = 1;
+                }
+            }
+        }
+    }
+}
+
+int numberOfIsland(vector<vector<int>> &grid) {
+    int n = grid.size();
+    int m = grid[0].size();
+    vector<vector<int>> visited(n, vector<int>(m, 0));
+    queue<pair<int, int>> q;  
+    int count = 0;
+    
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(grid[i][j] == 1 && !visited[i][j]) {
+                BFS(grid, visited, q, i, j);
+                count++;
+            }
+        }
+    }
+    
+    return count;
+}
+
+int main() {
+    
+    int n, m;
+    
+    cout<<"Enter number of rows :- ";
+    cin>>n;
+    cout<<"Enter number of columns :- ";
+    cin>>m;
+    
+    vector<vector<int>> grid(n, vector<int>(m, 0));
+    
+    for(int i = 0; i < n; i++) {
+        cout<<"Enter "<<i + 1<<"th row :- ";
+        for(int j = 0; j < m; j++) {
+            cin>>grid[i][j];
+        }
+    }
+    cout<<"2 D grid is :- "<<endl;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cout<<grid[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    int noOfIslands = numberOfIsland(grid);
+    cout<<"Number of island is :- "<<noOfIslands;
+    
+    return 0;
+}
