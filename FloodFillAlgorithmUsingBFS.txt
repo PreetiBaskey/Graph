@@ -1,0 +1,89 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void BFS(vector<vector<int>> &image, int i, int j, vector<vector<int>> &visited, queue<pair<int, int>> &q, int initialColor) {
+    int n = image.size();
+    int m = image[0].size();
+    int delRow[] = {-1, 0, 1, 0};
+    int delCol[] = {0, 1, 0, -1};
+    
+    while(!q.empty()) {
+        int front_row = q.front().first;
+        int front_col = q.front().second;
+        q.pop();
+        for(int i = 0; i < 4; i++) {
+            int newRow = front_row + delRow[i];
+            int newCol = front_col + delCol[i];
+            if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && image[newRow][newCol] == initialColor && !visited[newRow][newCol]) {
+                q.push({newRow, newCol});
+                visited[newRow][newCol] = 1;
+                image[newRow][newCol] = 2;
+            }
+        }
+    }
+}
+
+void coloredImage(vector<vector<int>> &image, int sr, int sc, int newColor, vector<vector<int>> &visited) {
+    int initialColor = image[sr][sc];
+    image[sr][sc] = newColor;
+    int n = image.size();
+    int m = image[0].size();
+    queue<pair<int, int>> q;
+    q.push({sr, sc});
+    visited[sr][sc] = 1;
+    
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(!visited[i][j]) {
+                BFS(image, i, j, visited, q, initialColor);
+            }
+        }
+    }
+}
+
+int main() {
+    
+    int n, m, sr, sc, newColor;
+    
+    cout<<"Enter number of rows :- ";
+    cin>>n;
+    cout<<"Enter number of columns :- ";
+    cin>>m;
+    
+    cout<<"Enter initial row :- ";
+    cin>>sr;
+    cout<<"Enter initial column :- ";
+    cin>>sc;
+    cout<<"Enter new color :- ";
+    cin>>newColor;
+    
+    vector<vector<int>> image(n, vector<int>(m, 0));
+    vector<vector<int>> visited(n, vector<int>(m, 0));
+    
+    for(int i = 0; i < n; i++) {
+        cout<<"Enter "<<i + 1<<" th row :- ";
+        for(int j = 0; j < m; j++) {
+            cin>>image[i][j];
+        }
+    }
+    cout<<"2 D image is :- "<<endl;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cout<<image[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    coloredImage(image, sr, sc, newColor, visited);
+    
+    cout<<"Image after new colors :- "<<endl;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cout<<image[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    
+    return 0;
+}
