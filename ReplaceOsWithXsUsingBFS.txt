@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void BFS(vector<vector<char>> &mat, queue<pair<int, int>> &q) {
+    int n = mat.size();
+    int m = mat[0].size();
+    vector<vector<int>> visited(n, vector<int>(m, 0));
+    int delRow[] = {-1,0, 1, 0};
+    int delCol[] = {0, 1, 0, -1};
+    
+    while(!q.empty()) {
+        int front_row = q.front().first;
+        int front_col = q.front().second;
+        q.pop();
+        for(int i = 0; i < 4; i++) {
+            int newRow = front_row + delRow[i];
+            int newCol = front_col + delCol[i];
+            if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && mat[newRow][newCol] == 'o' && !visited[newRow][newCol]) {
+                q.push({newRow, newCol});
+                visited[newRow][newCol] = 1;
+            }
+        }
+    }
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(mat[i][j] == 'o' && !visited[i][j]) {
+                mat[i][j] = 'x';
+            }
+        }
+    }
+}
+
+int main() {
+    
+    int n, m;
+    
+    cout<<"Enter number of rows :- ";
+    cin>>n;
+    cout<<"Enter number of columns :- ";
+    cin>>m;
+    
+    vector<vector<char>> mat(n, vector<char>(m));
+    queue<pair<int, int>> q;
+    
+    for(int i = 0; i < n; i++) {
+        cout<<"Enter "<<i<<"th row :- ";
+        for(int j = 0; j < m; j++) {
+            cin>>mat[i][j];
+        }
+    }
+    cout<<"2 D mat is :- "<<endl;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cout<<mat[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    for(int i = 0; i < n; i++) {
+        if(mat[i][0] == 'o') {
+            q.push({i, 0});
+        }
+        if(mat[i][m - 1] == 'o') {
+            q.push({i, m - 1});
+        }
+    }
+    for(int j = 0; j < m; j++) {
+        if(mat[0][j] == 'o') {
+            q.push({0, j});
+        }
+        if(mat[n - 1][j] == 'o') {
+            q.push({n - 1, j});
+        }
+    }
+    
+    BFS(mat, q);
+    
+    cout<<"Modified matrix is :- "<<endl;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cout<<mat[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    return 0;
+}
