@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void BFS(vector<vector<int>> &grid, vector<vector<int>> &visited, set<vector<pair<int, int>>> &st, vector<pair<int, int>> &distinct, int i, int j) {
+    int n = grid.size();
+    int m = grid[0].size();
+    int delRow[] = {-1, 0, 1, 0};
+    int delCol[] = {0, 1, 0, -1};
+    queue<pair<int, int>> q;
+    q.push({i, j});
+    while(!q.empty()) {
+        int front_row = q.front().first;
+        int front_col = q.front().second;
+        q.pop();
+        for(int i = 0; i < 4; i++) {
+            int newRow = front_row + delRow[i];
+            int newCol = front_col + delCol[i];
+            if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && grid[newRow][newCol] == 1 && !visited[newRow][newCol]) {
+                q.push({newRow, newCol});
+                visited[newRow][newCol] = 1;
+                distinct.push_back({newRow - front_row, newCol - front_col});
+            }
+        }
+    }
+}
+
+int main() {
+    
+    int n, m;
+    
+    cout<<"Enter number of rows :- ";
+    cin>>n;
+    cout<<"Enter number of columns :- ";
+    cin>>m;
+    
+    vector<vector<int>> grid(n, vector<int>(m));
+    
+    for(int i = 0; i < n; i++) {
+        cout<<"Enter "<<i + 1<<"th row :- ";
+        for(int j = 0; j < m; j++) {
+            cin>>grid[i][j];
+        }
+    }
+    
+    cout<<"2 D grid is :- "<<endl;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cout<<grid[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    set<vector<pair<int, int>>> st;
+    vector<vector<int>> visited(n, vector<int>(m, 0));
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(grid[i][j] == 1 && !visited[i][j]) {
+                vector<pair<int, int>> distinct;
+                BFS(grid, visited, st, distinct, i, j);
+                st.insert(distinct);
+            }
+        }
+    }
+    
+    cout<<"Number of islands distinct is :- "<<st.size();
+    
+    
+    return 0;
+}
