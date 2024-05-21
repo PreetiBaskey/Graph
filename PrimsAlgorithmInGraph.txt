@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int V = 7;
+
+void addEdge(vector<pair<int, int>> adj[], int source, int destination, int weight) {
+    adj[source].push_back({destination, weight});
+    adj[destination].push_back({source, weight});
+}
+
+int main() {
+    
+    vector<pair<int, int>> adj[V];
+    
+    addEdge(adj, 0, 1, 5);
+    addEdge(adj, 0, 3, 20);
+    addEdge(adj, 1, 2, 5);
+    addEdge(adj, 2, 3, 5);
+    addEdge(adj, 3, 4, 1);
+    addEdge(adj, 4, 5, 2);
+    addEdge(adj, 4, 6, 4);
+    addEdge(adj, 5, 6, 2);
+    
+    priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+    
+    pq.push({0, {-1, 0}});
+    vector<int> inMST(V, 0);
+    vector<int> parents(V, -1);
+    int count = 0;
+    
+    
+    while(!pq.empty()) {
+        int parent = pq.top().second.first; //Source
+        int node = pq.top().second.second; //Destination 
+        int weight = pq.top().first;
+        pq.pop();
+        cout<<"Source : "<<parent<<" , "<<"Destination : "<<node<<" , "<<"Weight : "<<weight<<endl;
+        
+        if(!inMST[node]) {
+            inMST[node] = 1;
+            count += weight;
+        }
+        
+        for(auto &neighbour: adj[node]) {
+            int adj_node = neighbour.first;
+            int adj_weight = neighbour.second;
+            if(!inMST[adj_node]) {
+                pq.push({adj_weight, {node, adj_node}});
+                parents[adj_node] = node;
+            }
+        }
+    }
+    
+    cout<<"Minimum spanning tree's weight is :- "<<count;
+    cout<<endl<<"Parent of all the node are :- ";
+    for(auto &data: parents) {
+        cout<<data<<" ";
+    }
+    
+    return 0;
+}
