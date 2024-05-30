@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// Test Case 1
+const int n = 7;
+
+// Test Case 2
+// const int n = 3;
+
+void addEdge(vector<vector<int>> &adj, int source, int destination) {
+    adj[source].push_back(destination);
+    adj[destination].push_back(source);
+}
+
+void DFS(int u, vector<vector<int>> &adj, vector<int> &visited, long long &Size) {
+    visited[u] = 1;
+    Size++;
+    
+    for(auto &v: adj[u]) {
+        if(!visited[v]) {
+            DFS(v, adj, visited, Size);
+        }
+    }
+}
+
+int countPairs(vector<vector<int>> &adj) {
+    
+    vector<int> visited(n, 0);
+    long long remainingNodes = n;
+    long long result = 0;
+    
+    for(int i = 0; i < n; i++) {
+        if(!visited[i]) {
+            
+            long long Size = 0;
+            
+            DFS(i, adj, visited, Size);
+            result += Size * (remainingNodes - Size);
+            remainingNodes -= Size;
+        }
+    }
+    
+    return result;
+}
+
+int main() {
+    
+    vector<vector<int>> adj(n);
+    
+    // Test Case 1
+    addEdge(adj, 0, 2);
+    addEdge(adj, 0, 5);
+    addEdge(adj, 2, 4);
+    addEdge(adj, 5, 4);
+    addEdge(adj, 1, 6);
+    
+    // Test Case 2
+    // addEdge(adj, 0, 1);
+    // addEdge(adj, 0, 2);
+    // addEdge(adj, 1, 2);
+    
+    int result = countPairs(adj);
+    cout<<"NUmber of count pairs is :- "<<result;
+    
+    return 0;
+}
