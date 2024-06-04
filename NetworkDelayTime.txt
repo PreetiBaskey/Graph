@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int V = 4;
+
+void addEdge(vector<vector<int>> adj[], int source, int destination, int weight) {
+    adj[source].push_back({destination, weight});
+    adj[destination].push_back({source, weight});
+}
+
+int main() {
+    
+    vector<vector<int>> adj[V];
+    
+    addEdge(adj, 0, 1, 1);
+    addEdge(adj, 1, 2, 1);
+    addEdge(adj, 2, 3, 1);
+    
+    vector<int> result(V, INT_MAX);
+    int source = 2;
+    result[source] = 0;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    
+    pq.push({0, source});
+    
+    while(!pq.empty()) {
+        int front_weight = pq.top().first;
+        int front_node = pq.top().second;
+        pq.pop();
+        
+        for(auto &neighbour: adj[front_node]) {
+            int neighbour_node = neighbour[0];
+            int neighbour_weight = neighbour[1];
+            
+            if(front_weight + neighbour_weight < result[neighbour_node]) {
+                result[neighbour_node] = front_weight + neighbour_weight;
+                pq.push({front_weight + neighbour_weight, neighbour_node});
+            }
+        }
+    }
+    
+    cout<<"Minimum weights are from source "<<source<<" is :- ";
+    int max = 0;
+    for(auto &data: result) {
+        cout<<data<<" ";
+        if(max < data) {
+            max = data;
+        }
+    }
+    cout<<endl<<"Minimum Network Delay Time is :- "<<max;
+    
+    
+    return 0;
+}
