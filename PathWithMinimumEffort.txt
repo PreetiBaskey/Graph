@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef pair<int, pair<int, int>> P;
+
+vector<vector<int>> directions{{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
+
+int minimumEffort(vector<vector<int>> &grid) {
+    
+    int n = grid.size();
+    int m = grid[0].size();
+    
+    auto isSafe = [&](int x, int y) {
+        return x >= 0 && x < n && y >= 0 && y < m;
+    };
+    
+    vector<vector<int>> result(n, vector<int>(m, INT_MAX));
+    result[0][0] = 0;
+    priority_queue<P, vector<P>, greater<P>> pq;
+    pq.push({0, {0, 0}});
+    
+    while(!pq.empty()) {
+        int diff = pq.top().first;
+        auto coord = pq.top().second;
+        int x = coord.first;
+        int y = coord.second;
+        pq.pop();
+        
+        if(x == n - 1 && y == m - 1) {
+            return diff;
+        }
+        
+        for(auto &dir: directions) {
+            int new_x = x + dir[0];
+            int new_y = y + dir[1];
+            
+            if(isSafe(new_x, new_y)) {
+                int absDiff = abs(grid[x][y] - grid[new_x][new_y]);
+                int maxDiff = max(diff, absDiff);
+                
+                if(result[new_x][new_y] > maxDiff) {
+                    result[new_x][new_y] = maxDiff;
+                    pq.push({maxDiff, {new_x, new_y}});
+                }
+            }
+        }
+    }
+    
+    return result[n - 1][m - 1];
+}
+
+int main() {
+    
+    int n, m;
+    cout<<"Enter number of rows :- ";
+    cin>>n;
+    cout<<"Enter number of columns :- ";
+    cin>>m;
+    
+    vector<vector<int>> grid(n, vector<int>(m));
+    
+    for(int i = 0; i < n; i++) {
+        cout<<"Enter "<<i<<" th row :- ";
+        for(int j = 0; j < m; j++) {
+            cin>>grid[i][j];
+        }
+    }
+    cout<<"2 D grid is :- "<<endl;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cout<<grid[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    int result = minimumEffort(grid);
+    cout<<endl<<"Minimum effort is :- "<<result;
+    
+    return 0;
+}
