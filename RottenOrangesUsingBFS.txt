@@ -1,4 +1,4 @@
-// Approach 1
+// Approach 1 - Good one - Recommended this solution instead of below one.
 #include<bits/stdc++.h>
 using namespace std;
 typedef pair<int, int> P;
