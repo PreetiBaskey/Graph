@@ -1,3 +1,87 @@
+// Approach 1
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int, int> P;
+
+int calculateMinute(vector<vector<int>> &grid, queue<P> &q, int &freshOrangeCount) {
+    int m = grid.size();
+    int n = grid[0].size();
+    vector<vector<int>> visited(m, vector<int>(n, 0));
+    int delRow[] = {0, 1, 0, -1};
+    int delCol[] = {-1, 0, 1, 0};
+    int minute = 0;
+    while(!q.empty()) {
+        int length = q.size();
+        while(length--) {
+            int frontRow = q.front().first;
+            int frontCol = q.front().second;
+            q.pop();
+            for(int i = 0; i < 4; i++) {
+                int newRow = frontRow + delRow[i];
+                int newCol = frontCol + delCol[i];
+                if(newRow >=0 && newRow < m && newCol >= 0 && newCol < n && grid[newRow][newCol] == 1 && !visited[newRow][newCol]) {
+                    grid[newRow][newCol] = 2;
+                    q.push({newRow, newCol});
+                    freshOrangeCount--;
+                }
+            }
+        }
+        minute++;
+    }
+    
+    if(freshOrangeCount != 0) return -1;
+    else return minute - 1;
+}
+
+int main() {
+    
+    int m, n;
+    cout<<"Enter the number of rows :- ";
+    cin>>m;
+    cout<<"Enter the number of columns :- ";
+    cin>>n;
+    vector<vector<int>> grid(m, vector<int>(n));
+    int freshOrangeCount = 0;
+    queue<P> q; 
+    
+    for(int i = 0; i < m; i++) {
+        cout<<"Enter "<<i<<"th row :- ";
+        for(int j = 0; j < n; j++) {
+            cin>>grid[i][j];
+        }
+    }
+    cout<<"2D grid is :- "<<endl;
+    for(int i = 0; i < m; i++) {
+        for(int j = 0; j < n; j++) {
+            cout<<grid[i][j]<<" ";
+            if(grid[i][j] == 2) {
+                q.push({i, j});
+            }
+            else if(grid[i][j] == 1) {
+                freshOrangeCount++;
+            }
+        }
+        cout<<endl;
+    }
+    
+    if(freshOrangeCount == 0) {
+        cout<<"There is no fresh oranges";
+    }
+    else {
+        cout<<"Minimum minute to rot all the oranges is :- "<<calculateMinute(grid, q, freshOrangeCount);
+    }
+    
+    
+    return 0;
+}
+
+
+
+
+
+
+
+// Approach 2
 #include<bits/stdc++.h>
 using namespace std;
 
