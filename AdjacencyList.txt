@@ -1,3 +1,13 @@
+// Time Complexity :- 
+/*Building the graph: O(E)
+Printing the graph: O(V + E)
+Total = O(V + E)*/
+
+// Space Complexity :- 
+/*Adjacency list: O(V + E)
+(plus small O(1) auxiliary variables)
+Total = O(V + E)*/
+
 #include<bits/stdc++.h>
 using namespace std;
 
