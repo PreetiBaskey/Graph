@@ -90,3 +90,49 @@ int main() {
     
     return 0;
 }
+
+
+
+
+// LeetCode version
+class Solution {
+public:
+
+    bool isCyclic(vector<vector<int>> &graph, vector<int> &visited, vector<int> &inRecursion, int node) {
+        visited[node] = 1;
+        inRecursion[node] = 1;
+        for(int &neighbour: graph[node]) {
+            if(!visited[neighbour]) {
+                if(isCyclic(graph, visited, inRecursion, neighbour) == true) {
+                    return true;
+                } 
+            }
+            else if(inRecursion[neighbour]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int v = graph.size();
+        vector<int> visited(v, 0);
+        vector<int> inRecursion(v, 0);
+        vector<int> safeNodes;
+
+        for(int i = 0; i < v; i++) {
+            if(!visited[i]) {
+                isCyclic(graph, visited, inRecursion, i);
+            }
+        }
+
+        for(int i = 0; i < v; i++) {
+            if(!inRecursion[i]) {
+                safeNode.push_back(i);
+            }
+        }
+
+        return safeNodes;
+    }
+};
