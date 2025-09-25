@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool canFinish(vector<vector<int>> &prerequisites, int V) {
+    unordered_map<int, vector<int>> graph;
+    vector<int> inDegree(V, 0);
+    queue<int> q;
+    
+    for(auto &u: prerequisites) {
+        int a = u[0];
+        int b = u[1];
+        graph[b].push_back(a);
+        inDegree[a]++;
+    }
+    int count = 0;
+    for(int i = 0; i < V; i++) {
+        if(inDegree[i] == 0) {
+            q.push(i);
+        }
+    }
+    while(!q.empty()) {
+        int u = q.front();
+        q.pop();
+        count++;
+        for(int &v: graph[u]) {
+            inDegree[v]--;
+            if(inDegree[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+    if(count == V) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+int main() {
+    
+    int numCourses = 2;
+    int prerequisitesNo;
+    cout<<"Enter prerequisites number :- ";
+    cin>>prerequisitesNo;
+    vector<vector<int>> prerequisites(prerequisitesNo, vector<int>(numCourses));
+    
+    for(int i = 0; i < prerequisitesNo; i++) {
+        cout<<"Enter course "<<i+1<<"th :- ";
+        for(int j = 0; j < numCourses; j++) {
+            cin>>prerequisites[i][j];
+        }
+    }
+    cout<<"Your prerequisites are :- "<<endl;
+    for(int i = 0; i < prerequisitesNo; i++) {
+        for(int j = 0; j < numCourses; j++) {
+            cout<<prerequisites[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    bool result = canFinish(prerequisites, numCourses);
+    if(result) {
+        cout<<"It can be completed!";
+    }
+    else {
+        cout<<"It can not be completed!";
+    }
+    
+    return 0;
+}
