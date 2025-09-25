@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int V = 4;
+
+void addEdge(vector<int> graph[], int source, int destination) {
+    graph[source].push_back(destination);
+}
+
+void printGraph(vector<int> graph[]) {
+    cout<<"Adjacency list is :- "<<endl;
+    for(int i = 0; i < V; i++) {
+        cout<<"Number of neighbours of "<<i<<" is :- "<<graph[i].size()<<endl;
+        for(int &neighbour: graph[i]) {
+            cout<<"There is an edge between "<<i<<" and "<<neighbour<<endl;
+        }
+        cout<<endl;
+    }
+    
+}
+
+bool isCyclic(vector<int> graph[]) {
+    vector<int> inDegree(V, 0);
+    queue<int> q;
+    int count = 0;
+    for(int u = 0; u < V; u++) {
+        for(int &v: graph[u]) {
+            inDegree[v]++;
+        }
+    }
+    for(int i = 0; i < V; i++) {
+        if(inDegree[i] == 0) {
+            q.push(i);
+        }
+    }
+    while(!q.empty()) {
+        int u = q.front();
+        q.pop();
+        count++;
+        for(int &v: graph[u]) {
+            inDegree[v]--;
+            if(inDegree[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+    
+    if(count == V) {
+        return false;
+    }
+    else return true;
+}
+
+int main() {
+    
+    vector<int> graph[V];
+    
+    addEdge(graph, 0, 1);
+    addEdge(graph, 0, 2);
+    addEdge(graph, 0, 3);
+    addEdge(graph, 1, 2);
+    
+    printGraph(graph);
+    
+    bool result = isCyclic(graph);
+    if(result) {
+        cout<<"Graph is cyclic !";
+    }
+    else {
+        cout<<"Graph is not cyclic !";
+    }
+    
+    return 0;
+}
