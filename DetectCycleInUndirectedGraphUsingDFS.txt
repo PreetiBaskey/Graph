@@ -65,3 +65,56 @@ int main() {
     
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+// GFG Version - Detect Cycle in an undirected graph using DFS
+class Solution {
+  public:
+    bool DFS(vector<int> graph[], vector<int> &visited, int node, int parent) {
+        visited[node] = 1;
+        for(int &neighbour: graph[node]) {
+            if(!visited[neighbour]) {
+                if(DFS(graph, visited, neighbour, node)) {
+                    return true;
+                }
+            }
+            else {
+                if(neighbour != parent) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    bool isCycle(int V, vector<vector<int>>& edges) {
+        // Code here
+        vector<int> graph[V];
+        for(auto &node: edges) {
+            int source = node[0];
+            int destination = node[1];
+            graph[source].push_back(destination);
+            graph[destination].push_back(source);
+        }
+        
+        vector<int> visited(V, 0);
+        for(int i = 0; i < V; i++) {
+            if(!visited[i]) {
+                if(DFS(graph, visited, i, -1)) {
+                    return true;
+                }
+            }
+        }
+        
+        
+        return false;
+    }
+};
