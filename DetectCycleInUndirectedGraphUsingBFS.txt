@@ -69,3 +69,56 @@ int main() {
     
     return 0;
 }
+
+
+
+// GFG Version - Detect Cycle in an undirected graph using BFS
+class Solution {
+  public:
+    bool BFS(vector<vector<int>> &graph, vector<int> &visited, int node, int parent) {
+        queue<pair<int, int>> q;
+        visited[node] = 1;
+        q.push({node, -1});
+        
+        while(!q.empty()) {
+            int frontNode = q.front().first;
+            int frontParent = q.front().second;
+            q.pop();
+            for(int neighbour: graph[frontNode]) {
+                if(!visited[neighbour]) {
+                    visited[neighbour] = 1;
+                    q.push({neighbour, frontNode});
+                }
+                else {
+                    if(neighbour != frontParent) {
+                        return true;
+                    }
+                }
+            }
+        }
+    
+        return false;
+    }
+    bool isCycle(int V, vector<vector<int>>& edges) {
+        // Code here
+        vector<vector<int>> graph(V);
+        for(auto &node: edges) {
+            int source = node[0];
+            int destination = node[1];
+            graph[source].push_back(destination);
+            graph[destination].push_back(source);
+        }
+        
+        vector<int> visited(V, 0);
+        for(int i = 0; i < V; i++) {
+            if(!visited[i]) {
+                if(BFS(graph, visited, i, -1)) {
+                    return true;
+                }
+            }
+        }
+        
+        
+        return false;
+    }
+};
