@@ -1,27 +1,76 @@
+//approach - 2
+//time complexity - O(1)
+//space complexity - O(1)
+// class Solution {
+// public:
+//     int findCenter(vector<vector<int>>& edges) {
+//         int u1 = edges[0][0];
+//         int v1 = edges[0][1];
+
+//         int u2 = edges[1][0];
+//         int v2 = edges[1][1];
+
+//         if(u1 == u2 || u1 == v2) return u1;
+
+//         return v1;
+//     }
+// };
+
+
+
+
+//approach - 1
+//time complexity - O(n)
+//space complexity - O(n)
 class Solution {
 public:
     int findCenter(vector<vector<int>>& edges) {
-        int nodes_no = edges.size() + 1;
-        int edges_no = edges.size();
-        unordered_map<int,int> mp;
-        int centerNode;
-        for(vector<int> &outer: edges) {
-            for(int &inner: outer) {
-                if(mp.find(inner) == mp.end()) {
-                    mp[inner] = 1;
-                }
-                else {
-                    mp[inner]++;
-                }
+        vector<int> inDegree(edges.size() + 2, 0);
+        for(vector<int> &edge: edges) {
+            int u = edge[0];
+            int v = edge[1];
+
+            inDegree[u]++;
+            inDegree[v]++;
+        }
+
+        for(int i = 0; i < inDegree.size(); i++) {
+            if(inDegree[i] == edges.size()) {
+                return i;
             }
         }
 
-        for(int i = 1; i <= nodes_no ; i++) {
-            if(mp[i] == edges_no) {
-                centerNode = i;
-            }
-        }
-
-        return centerNode;
+        return -1;
     }
 };
+
+
+
+
+// class Solution {
+// public:
+//     int findCenter(vector<vector<int>>& edges) {
+//         int nodes_no = edges.size() + 1;
+//         int edges_no = edges.size();
+//         unordered_map<int,int> mp;
+//         int centerNode;
+//         for(vector<int> &outer: edges) {
+//             for(int &inner: outer) {
+//                 if(mp.find(inner) == mp.end()) {
+//                     mp[inner] = 1;
+//                 }
+//                 else {
+//                     mp[inner]++;
+//                 }
+//             }
+//         }
+
+//         for(int i = 1; i <= nodes_no ; i++) {
+//             if(mp[i] == edges_no) {
+//                 centerNode = i;
+//             }
+//         }
+
+//         return centerNode;
+//     }
+// };
