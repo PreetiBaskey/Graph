@@ -1,33 +1,76 @@
+// class Solution {
+// public:
+//     bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+//         unordered_map<int, vector<int>> mp;
+//         queue<int> q;
+//         vector<int> visited(n, false);
+        
+//         for(vector<int> &node: edges) {
+//             int source = node[0];
+//             int destination = node[1];
+
+//             mp[source].push_back(destination);
+//             mp[destination].push_back(source);
+//         }
+
+//         q.push(source);
+//         while(!q.empty()) {
+//             int frontNode = q.front();
+//             q.pop();
+//             if(frontNode == destination) {
+//                 return true;
+//             }
+//             for(int &v: mp[frontNode]) {
+//                 if(!visited[v]) {
+//                     q.push(v);
+//                     visited[v] = true;;
+//                 }
+//             }
+//         }
+
+//         return false;      
+//     }
+// };      
+
+
+//approach - 1
+//time complexity - O(V + E)
+//space complexity - O(V + E)
 class Solution {
 public:
+    void createGraph(vector<vector<int>> &graph, int source, int destination) {
+        graph[source].push_back(destination);
+        graph[destination].push_back(source);
+    }
     bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
-        unordered_map<int, vector<int>> mp;
-        queue<int> q;
-        vector<int> visited(n, false);
-        
-        for(vector<int> &node: edges) {
-            int source = node[0];
-            int destination = node[1];
+        if(source == destination) return true;
 
-            mp[source].push_back(destination);
-            mp[destination].push_back(source);
+        vector<vector<int>> graph(n);
+        for(vector<int> &edge: edges) {
+            int src = edge[0];
+            int dest = edge[1];
+            createGraph(graph, src, dest);
         }
 
-        q.push(source);
-        while(!q.empty()) {
-            int frontNode = q.front();
-            q.pop();
-            if(frontNode == destination) {
+       queue<int> q;
+       vector<int> visited(n, false);
+       q.push(source);
+       while(!q.empty()) {
+           int frontNode = q.front();
+           q.pop();
+
+           if(frontNode == destination) {
                 return true;
-            }
-            for(int &v: mp[frontNode]) {
+           }
+
+           for(int &v: graph[frontNode]) {
                 if(!visited[v]) {
                     q.push(v);
-                    visited[v] = true;;
+                    visited[v] = true;
                 }
-            }
-        }
+           }
+       }
 
-        return false;      
+        return false;
     }
-};      
+};
