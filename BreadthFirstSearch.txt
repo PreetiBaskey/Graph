@@ -1,3 +1,5 @@
+//time complexity - O(v+e)
+//space complexity - O(v)
 #include<bits/stdc++.h>
 using namespace std;
 
